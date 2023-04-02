@@ -1,7 +1,10 @@
+using prjBuyHouse.Services.Interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IHouseService, IHouseService>();
 
 var app = builder.Build();
 
