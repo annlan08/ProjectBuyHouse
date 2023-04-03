@@ -109,15 +109,6 @@ namespace prjBuyHouse.Services
             try
             {
                 responseInfo.IsSuccess = await this._houseRepository.DeleteHouseObjectById(id);
-                if (responseInfo.IsSuccess == true)
-                {
-                    return responseInfo;
-                }
-                else
-                {
-                    responseInfo.ErrorInfo = "未預期錯誤，請回報管理員";
-                    return responseInfo;
-                }
             }
             catch (Exception ex)
             {
