@@ -19,7 +19,7 @@ namespace prjBuyHouse.Repository
             return result;
         }
 
-        public Task<HouseObject> GetHouseObjectById(int id)
+        public Task<HouseObject?> GetHouseObjectById(int id)
         {
             var result=this._context.HouseObjects.Where(x=>x.FId==id).FirstOrDefaultAsync();
             if (result != null)
@@ -32,7 +32,7 @@ namespace prjBuyHouse.Repository
             }
         }
 
-        public Task<HouseObject> GetHouseObjectByName(string name)
+        public Task<HouseObject?> GetHouseObjectByName(string name)
         {
             var result = this._context.HouseObjects.Where(x => x.FName == name).FirstOrDefaultAsync();
             if (result != null)
@@ -45,7 +45,7 @@ namespace prjBuyHouse.Repository
             }
         }
 
-        public Task<HouseObject> GetHouseObjectByGuid(Guid id)
+        public Task<HouseObject?> GetHouseObjectByGuid(Guid id)
         {
             var result = this._context.HouseObjects.Where(x => x.FGuid==id).FirstOrDefaultAsync();
             if (result != null)
