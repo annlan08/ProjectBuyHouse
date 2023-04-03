@@ -1,34 +1,48 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using prjBuyHouse.Models;
+using prjBuyHouse.Services.Interfaces;
 
 namespace prjBuyHouse.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class HouseController : ControllerBase
     {
-        [HttpGet]
-        public IActionResult GetHouseList()
+        private readonly IHouseService _houseService;
+
+        public HouseController(IHouseService houseService)
         {
-            return null;
+            _houseService = houseService;
+        }
+
+
+        [HttpGet]
+        public async Task<HouseObject> GetHouseList(int id)
+        {
+            var result =await _houseService.GetHouseByID(id);
+            return result;
         }
 
         [HttpPost]
-        public IActionResult CreateNewHouse()
+        public async Task<HouseResponseInfo> CreateNewHouse(HouseInputInfo houseInputInfo)
         {
-            return null;
+            var result=await _houseService.CreateNewHouseObject(houseInputInfo);
+            return result;
         }
 
         [HttpDelete]
-        public IActionResult DeleteHouse()
+        public async Task<HouseResponseInfo> DeleteHouse(int id)
         {
-            return null;
+            var result = await _houseService.DeleteHouseByID(id);
+            return result;
         }
 
         [HttpPatch]
-        public IActionResult UpdateHouse() 
+        public async Task<HouseResponseInfo> UpdateHouse(int id, HouseInputInfo houseInputInfo) 
         {
-            return null;
+            var result = await _houseService.UpdateHouseInfo(id, houseInputInfo);
+            return result;
         }
     }
 }

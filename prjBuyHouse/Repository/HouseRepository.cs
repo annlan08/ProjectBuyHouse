@@ -6,9 +6,16 @@ namespace prjBuyHouse.Repository
     public class HouseRepository:IHouseRepository
     {
         private HouseContext _context;
-        public HouseRepository(HouseContext context) 
+
+        public HouseRepository(HouseContext context)
         {
             this._context = context;
+        }
+
+        public async Task<List<HouseObject>> GetAllHouse()
+        {
+            var result=this._context.HouseObjects.ToList();
+            return result;
         }
 
         public async Task<HouseObject> GetHouseObjectById(int id)
@@ -19,16 +26,11 @@ namespace prjBuyHouse.Repository
 
         public async Task<bool> CreateNewHouseObject(HouseObject houseObject)
         {
-            try
-            {
-                this._context.HouseObjects.Add(houseObject);
-                this._context.SaveChanges();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+
+            this._context.HouseObjects.Add(houseObject);
+            this._context.SaveChanges();
+            return true;
+
         }
 
         public async Task<bool> UpdateHouseObject(int id, HouseObject houseObject)
@@ -36,15 +38,22 @@ namespace prjBuyHouse.Repository
             try
             {
                 var targetHouse = this._context.HouseObjects.Where(x => x.FId == id).FirstOrDefault();
-                targetHouse.FName= houseObject.FName;
-                targetHouse.FPrice= houseObject.FPrice;
-                targetHouse.FDescription= houseObject.FDescription;
-                this._context.SaveChanges();
-                return true;
+                if(targetHouse != null)
+                {
+                    targetHouse.FName = houseObject.FName;
+                    targetHouse.FPrice = houseObject.FPrice;
+                    targetHouse.FDescription = houseObject.FDescription;
+                    this._context.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    throw new Exception("未找到指定房屋");
+                }
             }
             catch
             {
-                return false;
+                throw new Exception("房屋修改失敗");
             }
         }
 
@@ -61,12 +70,12 @@ namespace prjBuyHouse.Repository
                 }
                 else
                 {
-                    throw new NullReferenceException();
+                    throw new Exception("無此房屋");
                 }
             }
             catch 
             {
-                return false;
+                throw new Exception("房屋刪除失敗");
             }
         }
     }
