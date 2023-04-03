@@ -56,14 +56,9 @@ namespace prjBuyHouse.Services
             try
             {
                 responseInfo.IsSuccess = await this._houseRepository.CreateNewHouseObject(houseObject);
-                if (responseInfo.IsSuccess == true)
+                if (responseInfo.IsSuccess != true)
                 {
-                    return responseInfo;
-                }
-                else
-                {
-                    responseInfo.ErrorInfo = "未預期錯誤，請回報管理員";
-                    return responseInfo;
+                    throw new Exception("未預期錯誤，請回報管理員");
                 }
             }
             catch (Exception ex)
@@ -74,19 +69,22 @@ namespace prjBuyHouse.Services
             return responseInfo;
         }
 
-        public async Task<HouseResponseInfo> UpdateHouseInfo(int id, HouseInputInfo houseInputInfo)
+        public async Task<HouseResponseInfo> UpdateHouseInfo(HouseInputInfo houseInputInfo)
         {
             HouseResponseInfo responseInfo = new HouseResponseInfo();
-            HouseObject houseObject = new HouseObject()
-            {
-                FName = houseInputInfo.HouseName,
-                FPrice = houseInputInfo.HousePrice,
-                FDescription = houseInputInfo.HouseDescription,
-            };
             try
             {
-
-                responseInfo.IsSuccess = await this._houseRepository.UpdateHouseObject(id, houseObject);
+                if (houseInputInfo.UpdateHouseID == null)
+                {
+                    throw new Exception("未指定需修改的目標房屋ID");
+                }
+                HouseObject houseObject = new HouseObject()
+                {
+                    FName = houseInputInfo.HouseName,
+                    FPrice = houseInputInfo.HousePrice,
+                    FDescription = houseInputInfo.HouseDescription,
+                };
+                responseInfo.IsSuccess = await this._houseRepository.UpdateHouseObject(houseInputInfo.UpdateHouseID.Value, houseObject);
                 if (responseInfo.IsSuccess == true)
                 {
                     return responseInfo;

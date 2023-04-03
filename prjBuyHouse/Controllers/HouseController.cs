@@ -39,9 +39,9 @@ namespace prjBuyHouse.Controllers
         }
 
         [HttpPatch]
-        public async Task<HouseResponseInfo> UpdateHouse(int id, HouseInputInfo houseInputInfo) 
+        public async Task<HouseResponseInfo> UpdateHouse(HouseInputInfo houseInputInfo) 
         {
-            var result = await _houseService.UpdateHouseInfo(id, houseInputInfo);
+            var result = await _houseService.UpdateHouseInfo(houseInputInfo);
             return result;
         }
     }

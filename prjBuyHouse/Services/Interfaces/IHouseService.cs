@@ -7,7 +7,7 @@ namespace prjBuyHouse.Services.Interfaces
         Task<List<HouseObject>> GetHouse();
         Task<HouseResponseInfo> GetHouseByID(int id);
         Task<HouseResponseInfo> CreateNewHouseObject(HouseInputInfo houseInputInfo);
-        Task<HouseResponseInfo> UpdateHouseInfo(int id, HouseInputInfo houseInputInfo);
+        Task<HouseResponseInfo> UpdateHouseInfo(HouseInputInfo houseInputInfo);
         Task<HouseResponseInfo> DeleteHouseByID(int id);
     }
 }

@@ -2,6 +2,8 @@
 {
     public class HouseInputInfo
     {
+        public int? UpdateHouseID { get; set; } = null;
+
         public string HouseName { get; set; }
 
         public decimal HousePrice { get; set; }
