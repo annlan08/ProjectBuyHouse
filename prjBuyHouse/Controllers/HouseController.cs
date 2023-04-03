@@ -18,7 +18,7 @@ namespace prjBuyHouse.Controllers
 
 
         [HttpGet]
-        public async Task<HouseObject> GetHouseList(int id)
+        public async Task<HouseResponseInfo> GetHouseList(int id)
         {
             var result =await _houseService.GetHouseByID(id);
             return result;

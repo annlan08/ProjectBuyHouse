@@ -19,10 +19,28 @@ namespace prjBuyHouse.Services
             return result;
         }
 
-        public async Task<HouseObject> GetHouseByID(int id)
+        public async Task<HouseResponseInfo> GetHouseByID(int id)
         {
-            var result=await this._houseRepository.GetHouseObjectById(id);
+            var result = new HouseResponseInfo();
+            try
+            {              
+                result.HouseResponseObject = await this._houseRepository.GetHouseObjectById(id);
+                if (result.HouseResponseObject != null)
+                {
+                    result.IsSuccess = true;
+                }
+                else
+                {
+                    throw new Exception("未找到資料");
+                }
+            }
+            catch (Exception ex)
+            {
+                result.IsSuccess = false;
+                result.ErrorInfo = ex.Message;
+            }
             return result;
+
         }
 
         public async Task<HouseResponseInfo> CreateNewHouseObject(HouseInputInfo houseInputInfo)
