@@ -5,6 +5,7 @@
         public bool IsSuccess { get; set; }
         public string? ErrorInfo { get; set; }
         public HouseObject? HouseResponseObject { get; set; }=null;
+        public List<HouseObject>? HouseResponseList { get; set; } = null;
     }
 
     //public class HouseResponseObject

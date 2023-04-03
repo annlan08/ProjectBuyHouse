@@ -2,6 +2,7 @@
 using prjBuyHouse.Repository;
 using prjBuyHouse.Repository.Interfaces;
 using prjBuyHouse.Services.Interfaces;
+using System.Diagnostics;
 
 namespace prjBuyHouse.Services
 {
@@ -47,7 +48,7 @@ namespace prjBuyHouse.Services
         /// 依照type來決定依照何種方式來當關鍵字搜尋房屋
         /// </summary>
         /// <param name="keyword"></param>
-        /// <param name="type">關鍵字類別 1是ID 2是GUID 3是房屋名稱</param>
+        /// <param name="type">關鍵字類別 1是ID 2是GUID 3是房屋名稱 4是模糊比對</param>
         /// <returns></returns>
         public async Task<HouseResponseInfo> SearchHouse(string keyword, int type)
         {
@@ -67,6 +68,9 @@ namespace prjBuyHouse.Services
                     case 3:
                         result.HouseResponseObject = await this._houseRepository.GetHouseObjectByName(keyword);
                         break;
+                    case 4:
+                        result.HouseResponseList=await this._houseRepository.GetHouseObjectsListByKeyword(keyword);
+                        break;
                     default:
                         throw new Exception("發生未預期例外狀況(不存在的搜尋方式)");
                 }
@@ -83,12 +87,12 @@ namespace prjBuyHouse.Services
         public async Task<HouseResponseInfo> CreateNewHouseObject(HouseInputInfo houseInputInfo)
         {
             HouseResponseInfo responseInfo= new HouseResponseInfo();
-            HouseObject houseObject= new HouseObject()
+            HouseObject houseObject = new HouseObject()
             {
-                FGuid=Guid.NewGuid(),
-                FName=houseInputInfo.HouseName,
+                FGuid = Guid.NewGuid(),
+                FName = houseInputInfo.HouseName == null ? "" : houseInputInfo.HouseName,
                 FPrice=houseInputInfo.HousePrice,
-                FDescription=houseInputInfo.HouseDescription,
+                FDescription=houseInputInfo.HouseDescription == null ? "" : houseInputInfo.HouseDescription,
             };
             try
             {
@@ -117,9 +121,9 @@ namespace prjBuyHouse.Services
                 }
                 HouseObject houseObject = new HouseObject()
                 {
-                    FName = houseInputInfo.HouseName,
+                    FName = houseInputInfo.HouseName == null ? "" : houseInputInfo.HouseName,
                     FPrice = houseInputInfo.HousePrice,
-                    FDescription = houseInputInfo.HouseDescription,
+                    FDescription = houseInputInfo.HouseDescription == null ? "" : houseInputInfo.HouseDescription,
                 };
                 responseInfo.IsSuccess = await this._houseRepository.UpdateHouseObject(houseInputInfo.UpdateHouseID.Value, houseObject);
                 if (responseInfo.IsSuccess == true)

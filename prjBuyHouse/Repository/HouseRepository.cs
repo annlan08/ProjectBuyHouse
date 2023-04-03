@@ -15,7 +15,7 @@ namespace prjBuyHouse.Repository
 
         public async Task<List<HouseObject>> GetAllHouse()
         {
-            var result=this._context.HouseObjects.ToList();
+            var result=await this._context.HouseObjects.ToListAsync();
             return result;
         }
 
@@ -58,10 +58,16 @@ namespace prjBuyHouse.Repository
             }
         }
 
+        public Task<List<HouseObject>> GetHouseObjectsListByKeyword(string keyword)
+        {
+            var result = this._context.HouseObjects.Where(x => x.FName.Contains(keyword) || x.FDescription.Contains(keyword)).ToListAsync();
+            return result;
+        }
+
         public async Task<bool> CreateNewHouseObject(HouseObject houseObject)
         {
-            this._context.HouseObjects.Add(houseObject);
-            this._context.SaveChanges();
+            await this._context.HouseObjects.AddAsync(houseObject);
+            await this._context.SaveChangesAsync();
             return true;
         }
 
@@ -69,8 +75,8 @@ namespace prjBuyHouse.Repository
         {
             try
             {
-                var targetHouse = this._context.HouseObjects.Where(x => x.FId == id).FirstOrDefault();
-                if(targetHouse != null)
+                var targetHouse = await GetHouseObjectById(id);
+                if (targetHouse != null)
                 {
                     targetHouse.FName = houseObject.FName;
                     targetHouse.FPrice = houseObject.FPrice;
@@ -93,7 +99,7 @@ namespace prjBuyHouse.Repository
         {
             try 
             {
-                var targetHouse = this._context.HouseObjects.Where(x => x.FId == id).FirstOrDefault();
+                var targetHouse = await GetHouseObjectById(id);
                 if(targetHouse!=null)
                 {
                     this._context.HouseObjects.Remove(targetHouse);
