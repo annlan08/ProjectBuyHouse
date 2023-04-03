@@ -1,4 +1,5 @@
-﻿using prjBuyHouse.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using prjBuyHouse.Models;
 using prjBuyHouse.Repository.Interfaces;
 
 namespace prjBuyHouse.Repository
@@ -18,19 +19,50 @@ namespace prjBuyHouse.Repository
             return result;
         }
 
-        public async Task<HouseObject> GetHouseObjectById(int id)
+        public Task<HouseObject> GetHouseObjectById(int id)
         {
-            var result=this._context.HouseObjects.Where(x=>x.FId==id).FirstOrDefault();
-            return result;
+            var result=this._context.HouseObjects.Where(x=>x.FId==id).FirstOrDefaultAsync();
+            if (result != null)
+            {
+                return result;
+            }
+            else
+            {
+                throw new Exception("未找到資料");
+            }
+        }
+
+        public Task<HouseObject> GetHouseObjectByName(string name)
+        {
+            var result = this._context.HouseObjects.Where(x => x.FName == name).FirstOrDefaultAsync();
+            if (result != null)
+            {
+                return result;
+            }
+            else
+            {
+                throw new Exception("未找到資料");
+            }
+        }
+
+        public Task<HouseObject> GetHouseObjectByGuid(Guid id)
+        {
+            var result = this._context.HouseObjects.Where(x => x.FGuid==id).FirstOrDefaultAsync();
+            if (result != null)
+            {
+                return result;
+            }
+            else
+            {
+                throw new Exception("未找到資料");
+            }
         }
 
         public async Task<bool> CreateNewHouseObject(HouseObject houseObject)
         {
-
             this._context.HouseObjects.Add(houseObject);
             this._context.SaveChanges();
             return true;
-
         }
 
         public async Task<bool> UpdateHouseObject(int id, HouseObject houseObject)

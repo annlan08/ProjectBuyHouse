@@ -24,6 +24,19 @@ namespace prjBuyHouse.Controllers
             return result;
         }
 
+        /// <summary>
+        /// 依照type來決定依照何種方式來當關鍵字搜尋房屋
+        /// </summary>
+        /// <param name="keyword"></param>
+        /// <param name="type">關鍵字類別 1是ID 2是GUID 3是房屋名稱</param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<HouseResponseInfo> SearchHouse(string keyword, int type)
+        {
+            var result = await _houseService.SearchHouse(keyword, type);
+            return result;
+        }
+
         [HttpPost]
         public async Task<HouseResponseInfo> CreateNewHouse(HouseInputInfo houseInputInfo)
         {

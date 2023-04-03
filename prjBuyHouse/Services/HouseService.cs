@@ -43,6 +43,43 @@ namespace prjBuyHouse.Services
 
         }
 
+        /// <summary>
+        /// 依照type來決定依照何種方式來當關鍵字搜尋房屋
+        /// </summary>
+        /// <param name="keyword"></param>
+        /// <param name="type">關鍵字類別 1是ID 2是GUID 3是房屋名稱</param>
+        /// <returns></returns>
+        public async Task<HouseResponseInfo> SearchHouse(string keyword, int type)
+        {
+            var result = new HouseResponseInfo();
+            try
+            {
+                switch (type)
+                {
+                    case 1:
+                        int id = Convert.ToInt32(keyword);
+                        result.HouseResponseObject = await this._houseRepository.GetHouseObjectById(id);
+                        break;
+                    case 2:
+                        Guid guid = Guid.Parse(keyword);
+                        result.HouseResponseObject = await this._houseRepository.GetHouseObjectByGuid(guid);
+                        break;
+                    case 3:
+                        result.HouseResponseObject = await this._houseRepository.GetHouseObjectByName(keyword);
+                        break;
+                    default:
+                        throw new Exception("發生未預期例外狀況(不存在的搜尋方式)");
+                }
+                result.IsSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                result.IsSuccess= false;
+                result.ErrorInfo = ex.Message; 
+            }
+            return result;
+        }
+
         public async Task<HouseResponseInfo> CreateNewHouseObject(HouseInputInfo houseInputInfo)
         {
             HouseResponseInfo responseInfo= new HouseResponseInfo();
