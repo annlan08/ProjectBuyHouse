@@ -17,10 +17,13 @@ builder.Services.AddDbContext<HouseContext>(option =>
 var optionsBuilder = new DbContextOptionsBuilder<HouseContext>();
 optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("HouseContext"));
 var options = optionsBuilder.Options;
+string? DBConnectionString = builder.Configuration.GetConnectionString("HouseContext");
 #endregion
 
-builder.Services.AddSingleton<IHouseRepository>(_=>new HouseRepository(new HouseContext(options)));
-builder.Services.AddSingleton<IHouseService, HouseService>();
+
+
+builder.Services.AddTransient<IHouseRepository>(_=>new HouseRepository(new HouseContext(options), DBConnectionString));
+builder.Services.AddTransient<IHouseService, HouseService>();
 
 var app = builder.Build();
 
