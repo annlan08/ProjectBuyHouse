@@ -22,8 +22,8 @@ string? DBConnectionString = builder.Configuration.GetConnectionString("HouseCon
 
 
 
-builder.Services.AddTransient<IHouseRepository>(_=>new HouseRepository(new HouseContext(options), DBConnectionString));
-builder.Services.AddTransient<IHouseService, HouseService>();
+builder.Services.AddSingleton<IHouseRepository>(_=>new HouseRepository(new HouseContext(options), DBConnectionString));
+builder.Services.AddSingleton<IHouseService, HouseService>();
 
 var app = builder.Build();
 
